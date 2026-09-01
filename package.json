@@ -1,0 +1,37 @@
+{
+  "name": "gitsnap-cli",
+  "version": "1.0.0",
+  "description": "A production-ready CLI and backend for generating sanitized Git snapshots for AI prompts and cloud sync.",
+  "main": "src/cli.js",
+  "bin": {
+    "gitsnap": "./bin/index.js"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "test": "node --test",
+    "lint": "node --check src/**/*.js && node --check server/**/*.js && node --check bin/index.js",
+    "gitsnap": "node src/cli.js",
+    "postinstall": "chmod +x ./bin/index.js"
+  },
+  "keywords": [
+    "git",
+    "cli",
+    "snapshot",
+    "ai",
+    "prompt",
+    "security",
+    "backend"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.7.7",
+    "chalk": "^4.1.2",
+    "clipboardy": "^3.0.0",
+    "commander": "^12.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "lowdb": "^7.0.0",
+    "ora": "^8.0.0"
+  }
+}
