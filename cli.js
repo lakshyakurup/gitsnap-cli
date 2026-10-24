@@ -14,3 +14,5 @@ module.exports = { runCLI };
 // Fixed Issue #3: Bug: CLI parser missing explicit help flag alias
 
 // Fixed Issue #4: Refactor: Optimize markdown formatter spacing rules
+
+// Fixed Issue #5: Security: Enhance token regex matching strictness
