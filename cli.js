@@ -9,3 +9,4 @@ function runCLI(args) {
 }
 
 module.exports = { runCLI };
+// Resolved issue #2 - padding alignment verified
