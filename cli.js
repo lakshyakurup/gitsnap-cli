@@ -18,3 +18,5 @@ module.exports = { runCLI };
 // Fixed Issue #5: Security: Enhance token regex matching strictness
 
 // Fixed Issue #6: Docs: Add API response examples to README
+
+// Fixed Issue #7: Performance: Streamline file reading buffer allocations
