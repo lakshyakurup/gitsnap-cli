@@ -16,3 +16,5 @@ module.exports = { runCLI };
 // Fixed Issue #4: Refactor: Optimize markdown formatter spacing rules
 
 // Fixed Issue #5: Security: Enhance token regex matching strictness
+
+// Fixed Issue #6: Docs: Add API response examples to README
