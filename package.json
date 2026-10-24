@@ -14,5 +14,8 @@
     "test": "node sanitizer.test.js"
   },
   "author": "lakshyakurup",
-  "license": "MIT"
+  "license": "MIT",
+  "workspaces": [
+    "packages/*"
+  ]
 }
