@@ -1,19 +1,12 @@
-const { SENSITIVE_RULES } = require('./rules');
+const { SECRET_PATTERNS } = require('./rules');
 
-function sanitizeText(value = '') {
-  if (value === null || value === undefined) {
-    return '';
-  }
-
-  let sanitized = String(value);
-
-  for (const rule of SENSITIVE_RULES) {
-    sanitized = sanitized.replace(rule.regex, rule.replacement);
-  }
-
+function sanitizeContext(rawText) {
+  if (!rawText) return '';
+  let sanitized = rawText;
+  SECRET_PATTERNS.forEach((pattern) => {
+    sanitized = sanitized.replace(pattern, '$1[REDACTED]');
+  });
   return sanitized;
 }
 
-module.exports = {
-  sanitizeText,
-};
+module.exports = { sanitizeContext };

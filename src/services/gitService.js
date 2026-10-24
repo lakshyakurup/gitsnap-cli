@@ -1,63 +1,20 @@
 const { execSync } = require('child_process');
 
-class GitService {
-  constructor(repoPath = process.cwd()) {
-    this.repoPath = repoPath;
-  }
-
-  run(command) {
-    return execSync(command, {
-      cwd: this.repoPath,
-      encoding: 'utf8',
-      stdio: ['pipe', 'pipe', 'pipe'],
-    }).trim();
-  }
-
-  getBranch() {
-    try {
-      return this.run('git branch --show-current') || 'detached HEAD';
-    } catch (error) {
-      return 'detached HEAD';
-    }
-  }
-
-  getStatus() {
-    try {
-      return this.run('git status --short');
-    } catch (error) {
-      return 'Unable to fetch git status.';
-    }
-  }
-
-  getDiff() {
-    try {
-      return this.run('git diff');
-    } catch (error) {
-      return 'No diff available.';
-    }
-  }
-
-  getRecentCommits(limit = 5) {
-    try {
-      const output = this.run(`git log -${limit} --pretty=format:%h|%an|%s`);
-      if (!output) {
-        return [];
-      }
-
-      return output.split('\n').map((line) => {
-        const [hash, author, ...messageParts] = line.split('|');
-        return {
-          hash,
-          author,
-          message: messageParts.join('|'),
-        };
-      });
-    } catch (error) {
-      return [];
-    }
+function runGitCommand(cmd) {
+  try {
+    return execSync(cmd, { encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'] }).trim();
+  } catch (err) {
+    return '';
   }
 }
 
-module.exports = {
-  GitService,
-};
+function getRepoContext(includeDiff = false) {
+  const branch = runGitCommand('git branch --show-current') || 'HEAD';
+  const status = runGitCommand('git status --porcelain');
+  const diff = includeDiff ? runGitCommand('git diff') : '';
+  const commitLog = runGitCommand('git log -n 3 --pretty=format:"%h - %an: %s"');
+
+  return { branch, status, diff, commitLog };
+}
+
+module.exports = { getRepoContext };

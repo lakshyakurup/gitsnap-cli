@@ -1,3 +1,3 @@
 #!/usr/bin/env node
-
-require('./src/cli.js');
+const { runCLI } = require('./cli');
+runCLI(process.argv);

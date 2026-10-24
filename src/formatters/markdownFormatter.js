@@ -1,29 +1,21 @@
-const { sanitizeText } = require('../security/sanitizer');
+const { sanitizeContext } = require('../security/sanitizer');
 
-function markdownFormatter(payload = {}, options = {}) {
-  const { secretMask = true } = options;
-  const branch = payload.branch || 'detached HEAD';
-  const statusOutput = payload.status || 'No tracked changes.';
-  const diffOutput = payload.diff || 'No diff available.';
+function formatMarkdown({ branch, status, diff, commitLog }, shouldMask = true) {
+  let md = `## Git Context Snapshot\n**Branch:** ${branch}\n\n`;
 
-  const finalStatus = secretMask ? sanitizeText(statusOutput) : statusOutput;
-  const finalDiff = secretMask ? sanitizeText(diffOutput) : diffOutput;
+  if (status) {
+    md += `### Status\n\`\`\`\n${shouldMask ? sanitizeContext(status) : status}\n\`\`\`\n\n`;
+  }
 
-  return [
-    '## Git Context Snapshot',
-    `**Branch:** ${branch}`,
-    '',
-    '### Git Status',
-    finalStatus || 'No tracked changes.',
-    '',
-    '### Git Diff',
-    '```diff',
-    finalDiff || 'No diff available.',
-    '```',
-    '',
-  ].join('\n');
+  if (diff) {
+    md += `### Diff\n\`\`\`diff\n${shouldMask ? sanitizeContext(diff) : diff}\n\`\`\`\n\n`;
+  }
+
+  if (commitLog) {
+    md += `### Commits\n\`\`\`\n${shouldMask ? sanitizeContext(commitLog) : commitLog}\n\`\`\`\n`;
+  }
+
+  return md;
 }
 
-module.exports = {
-  markdownFormatter,
-};
+module.exports = { formatMarkdown };

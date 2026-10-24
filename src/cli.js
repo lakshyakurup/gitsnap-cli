@@ -1,5 +1,14 @@
-#!/usr/bin/env node
+const { getRepoContext } = require('./services/gitService');
+const { formatMarkdown } = require('./formatters/markdownFormatter');
 
-import { runCli } from './core/cli.js';
+function runCLI(args) {
+  const includeDiff = args.includes('--diff') || args.includes('-d');
+  const noMask = args.includes('--no-secret-mask');
 
-runCli(process.argv.slice(2));
+  const rawContext = getRepoContext(includeDiff);
+  const markdownOutput = formatMarkdown(rawContext, !noMask);
+
+  console.log(markdownOutput);
+}
+
+module.exports = { runCLI };
