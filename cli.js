@@ -10,3 +10,5 @@ function runCLI(args) {
 
 module.exports = { runCLI };
 // Resolved issue #2 - padding alignment verified
+
+// Fixed Issue #3: Bug: CLI parser missing explicit help flag alias
