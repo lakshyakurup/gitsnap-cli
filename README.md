@@ -8,12 +8,16 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![Code Style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](https://standardjs.com)
+[![Made with Love](https://img.shields.io/badge/Made%20with-Love-red.svg)](https://github.com/lakshyakurup/gitsnap-cli)
+[![Hackathon Ready](https://img.shields.io/badge/Hackathon-Ready-orange.svg)](https://github.com/lakshyakurup/gitsnap-cli)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/lakshyakurup/gitsnap-cli/graphs/commit-activity)
 
 A production-ready CLI that captures sanitized Git context (branch, status, diff, commits, recent files) and formats it into clean Markdown or JSON — perfect for pasting into ChatGPT, Claude, Cursor, Copilot, Grok and any AI coding assistant.
 
 **Never leak secrets. Always produce clean, scannable context.**
 
-[Quick Start](#-quick-start) • [Features](#-features) • [Usage](#-usage) • [Architecture](#-architecture) • [Security](#-security)
+[Quick Start](#-quick-start) • [Features](#-features) • [Usage](#-full-cli-reference) • [Architecture](#-architecture) • [Security](#-security) • [Contributing](#-contributing)
 
 </div>
 
@@ -227,6 +231,57 @@ npm start
 
 ---
 
+## 👥 Contributing
+
+We welcome contributions of all kinds — bug fixes, new features, documentation improvements, and ideas!
+
+### How to Contribute
+
+1. **Fork** the repository
+2. **Clone** your fork
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/gitsnap-cli.git
+   cd gitsnap-cli
+   ```
+3. **Create a branch**
+   ```bash
+   git checkout -b feature/amazing-improvement
+   ```
+4. **Install & test**
+   ```bash
+   npm install
+   npm test
+   ```
+5. **Make your changes** and commit
+   ```bash
+   git commit -m "feat: add amazing improvement"
+   ```
+6. **Push** and open a Pull Request
+   ```bash
+   git push origin feature/amazing-improvement
+   ```
+
+### Contribution Ideas
+
+- Stronger secret detection patterns (with tests!)
+- New useful flags
+- Better Markdown / JSON formatting
+- Cross-platform clipboard improvements
+- Performance optimizations
+- Documentation & examples
+
+### Guidelines
+
+- Keep the CLI fast and dependency-light
+- Never weaken secret sanitization
+- Add tests for new sanitizer patterns
+- Update README when behavior changes
+- Follow the existing code style (CommonJS, clear names)
+
+See **[CONTRIBUTING.md](CONTRIBUTING.md)** for more details.
+
+---
+
 ## 🏆 Why gitsnap-cli?
 
 Modern AI coding tools are only as good as the context you give them.  
@@ -243,7 +298,7 @@ Perfect for:
 
 ## 📚 License
 
-MIT © lakshyakurup
+MIT © [lakshyakurup](https://github.com/lakshyakurup)
 
 ---
 
@@ -252,5 +307,7 @@ MIT © lakshyakurup
 **Star the repo if it saves you time!** ⭐
 
 Made for the international hackathon season 🚀
+
+[Report Bug](https://github.com/lakshyakurup/gitsnap-cli/issues) • [Request Feature](https://github.com/lakshyakurup/gitsnap-cli/issues) • [Contribute](CONTRIBUTING.md)
 
 </div>
