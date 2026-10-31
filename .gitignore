@@ -1,4 +1,11 @@
 node_modules/
 snapshots.json
 .env
+.env.*
 .DS_Store
+*.log
+.vscode/
+.idea/
+dist/
+coverage/
+*.tgz

@@ -1,21 +1,31 @@
 {
   "name": "gitsnap-cli",
   "version": "1.0.0",
-  "description": "A production-ready flat Git snapshot CLI and backend.",
+  "description": "Lightweight CLI that snapshots sanitized Git context into AI-ready Markdown",
   "main": "server.js",
   "bin": {
     "gitsnap": "./index.js"
   },
-  "dependencies": {
-    "express": "^4.19.2"
-  },
   "scripts": {
     "start": "node server.js",
-    "test": "node sanitizer.test.js"
+    "test": "node sanitizer.test.js",
+    "snap": "node index.js --diff"
   },
+  "keywords": [
+    "git",
+    "cli",
+    "snapshot",
+    "ai",
+    "markdown",
+    "sanitizer",
+    "prompt"
+  ],
   "author": "lakshyakurup",
   "license": "MIT",
-  "workspaces": [
-    "packages/*"
-  ]
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
 }
