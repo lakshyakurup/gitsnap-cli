@@ -1,6 +1,6 @@
 # gitsnap-cli
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Node](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)
 
@@ -17,21 +17,21 @@ A production-ready Git snapshot CLI and backend for capturing sanitized reposito
 * **Git diff output**
 * **Recent commit log metadata**
 * **Optional backend sync** to a local Express server
-* **Clipboard copy support** for instant paste into Copilot, ChatGPT, Claude, and similar tools
+* **Clipboard copy support** for instant paste into Copilot, ChatGPT, Claude, Cursor, Grok and similar tools
 
 ---
 
 ## Architecture
 
 ```text
-┌────────────────┐     ┌──────────────────┐     ┌────────────────────────┐
+┌────────────────┐     ┌───────────────────┐     ┌────────────────────────┐
 │  Git Repo      │ ──> │ gitsnap CLI      │ ──> │ Secret Sanitizer       │
-└────────────────┘     └──────────────────┘     └────────────────────────┘
+└────────────────┘     └───────────────────┘     └────────────────────────┘
                                                          │
                                                          ▼
-┌────────────────┐     ┌──────────────────┐     ┌────────────────────────┐
+┌────────────────┐     ┌───────────────────┐     ┌────────────────────────┐
 │ Local API / DB │ <── │ Express Backend  │ <── │ AI-Ready Markdown/JSON │
-└────────────────┘     └──────────────────┘     └────────────────────────┘
+└────────────────┘     └───────────────────┘     └────────────────────────┘
 ```
 
 ---
@@ -39,10 +39,11 @@ A production-ready Git snapshot CLI and backend for capturing sanitized reposito
 ## Key Features
 
 * **Safe Repo Validation:** Automatic Git repo detection and branch tracking.
-* **Secret Masking:** Strips API keys, JWTs, bearer tokens, private keys, and .env credentials.
-* **AI-Optimized Output:** Markdown structure designed specifically for prompt ingestion into Copilot, ChatGPT, and Claude.
-* **JSON Mode:** Structured output support for developer tooling integration.
-* **Backend Sync:** Optional persistence layer with a local Express API store (`snapshots.json`).
+* **Secret Masking:** Strips API keys, JWTs, bearer tokens, private keys, connection strings and .env credentials.
+* **AI-Optimized Output:** Markdown structure designed specifically for prompt ingestion.
+* **JSON Mode:** Structured output support for developer tooling.
+* **Clipboard Support:** One flag to copy the snapshot straight to your clipboard.
+* **Backend Sync:** Optional persistence layer with a local Express API.
 
 ---
 
@@ -50,12 +51,13 @@ A production-ready Git snapshot CLI and backend for capturing sanitized reposito
 
 | Flag | Description | Example |
 | :--- | :--- | :--- |
-| `-d, --diff` | Include Git diff output in the generated snapshot | `gitsnap --diff` |
+| `-d, --diff` | Include Git diff output | `gitsnap --diff` |
+| `-c, --copy` | Copy the snapshot to clipboard | `gitsnap --diff --copy` |
 | `-j, --json` | Output structured JSON instead of Markdown | `gitsnap --json` |
-| `-u, --upload` | Upload the generated snapshot to the configured backend | `gitsnap --upload` |
-| `-m, --secret-mask` | Force masking of sensitive values (enabled by default) | `gitsnap --secret-mask` |
-| `--no-secret-mask` | Disable secret masking | `gitsnap --no-secret-mask` |
-| `--api-url <url>` | Override the configured backend base URL | `gitsnap --api-url http://localhost:4000/api` |
+| `-u, --upload` | Upload the generated snapshot to the backend | `gitsnap --upload` |
+| `-m, --secret-mask` | Force masking of sensitive values (default) | `gitsnap --secret-mask` |
+| `--no-secret-mask` | Disable secret masking (debug only) | `gitsnap --no-secret-mask` |
+| `--api-url <url>` | Override the backend base URL | `gitsnap --api-url http://localhost:4000/api` |
 
 ---
 
@@ -71,6 +73,11 @@ npm link
 Inside any Git repository, run:
 ```bash
 gitsnap --diff
+```
+
+Copy straight to clipboard:
+```bash
+gitsnap --diff --copy
 ```
 
 ---
@@ -93,10 +100,12 @@ npm start
 ## Security & Masking
 
 Sensitive data is scrubbed before printing or uploading. The sanitizer automatically redacts:
+
 * `.env` file variables
-* API keys and access tokens
+* API keys (OpenAI, Anthropic, AWS, GitHub, Slack, Google…)
 * JWTs and bearer tokens
-* Private key blocks (`-----BEGIN PRIVATE KEY-----`)
+* Private key blocks
+* Database / Redis connection strings
 
 ---
 
