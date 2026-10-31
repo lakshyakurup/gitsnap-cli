@@ -8,12 +8,23 @@ function runGit(cmd) {
   }
 }
 
-function getRepoContext(includeDiff) {
+function getRepoContext(includeDiff = false, commitCount = 3, fileCount = 0) {
+  const nCommits = Math.max(1, Math.min(50, parseInt(commitCount, 10) || 3));
+  const nFiles = Math.max(0, Math.min(50, parseInt(fileCount, 10) || 0));
+
+  let recentFiles = '';
+  if (nFiles > 0) {
+    const raw = runGit(`git log -n ${Math.max(nCommits, nFiles)} --name-only --pretty=format:`);
+    const files = [...new Set(raw.split('\n').map(f => f.trim()).filter(Boolean))];
+    recentFiles = files.slice(0, nFiles).join('\n');
+  }
+
   return {
     branch: runGit('git branch --show-current') || 'HEAD',
     status: runGit('git status --porcelain'),
     diff: includeDiff ? runGit('git diff') : '',
-    commitLog: runGit('git log -n 3 --pretty=format:"%h - %an: %s"')
+    commitLog: runGit(`git log -n ${nCommits} --pretty=format:"%h - %an: %s"`),
+    recentFiles
   };
 }
 

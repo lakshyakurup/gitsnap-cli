@@ -1,6 +1,6 @@
 {
   "name": "gitsnap-cli",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Lightweight CLI that snapshots sanitized Git context into AI-ready Markdown",
   "main": "server.js",
   "bin": {
@@ -9,7 +9,8 @@
   "scripts": {
     "start": "node server.js",
     "test": "node sanitizer.test.js",
-    "snap": "node index.js --diff"
+    "snap": "node index.js --diff",
+    "snap:copy": "node index.js --diff --copy"
   },
   "keywords": [
     "git",
@@ -18,7 +19,8 @@
     "ai",
     "markdown",
     "sanitizer",
-    "prompt"
+    "prompt",
+    "clipboard"
   ],
   "author": "lakshyakurup",
   "license": "MIT",
