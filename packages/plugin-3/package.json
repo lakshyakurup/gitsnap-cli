@@ -1,7 +1,0 @@
-{
-  "name": "gitsnap-plugin-3",
-  "version": "1.0.3",
-  "description": "Modular extension plugin 3 for gitsnap-cli",
-  "main": "index.js",
-  "license": "MIT"
-}
