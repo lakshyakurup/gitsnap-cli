@@ -13,7 +13,6 @@ function copyToClipboard(text) {
       execSync('clip', { input: text, stdio: ['pipe', 'ignore', 'ignore'] });
       return true;
     }
-    // Linux / others – try xclip then xsel
     try {
       execSync('xclip -selection clipboard', { input: text, stdio: ['pipe', 'ignore', 'ignore'] });
       return true;
@@ -33,7 +32,6 @@ function getArgValue(args, flags) {
       return args[idx + 1];
     }
   }
-  // also support --flag=value style
   for (const flag of flags) {
     const found = args.find(a => a.startsWith(flag + '='));
     if (found) return found.split('=')[1];
