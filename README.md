@@ -17,7 +17,7 @@ A production-ready CLI that captures sanitized Git context (branch, status, diff
 
 **Never leak secrets. Always produce clean, scannable context.**
 
-[Quick Start](#-quick-start) • [Features](#-features) • [Usage](#-full-cli-reference) • [Architecture](#-architecture) • [Security](#-security) • [Contributing](#-contributing)
+[Quick Start](#-quick-start) • [Demo](#-demo) • [Features](#-features) • [Usage](#-full-cli-reference) • [Architecture](#-architecture) • [Security](#-security) • [Contributing](#-contributing)
 
 </div>
 
@@ -38,6 +38,77 @@ gitsnap --diff --commits 10 --files 8 --copy
 ```
 
 That’s it. The output is ready to paste into any AI chat.
+
+---
+
+## 🎬 Demo
+
+### 1. Basic Snapshot
+```bash
+gitsnap
+```
+
+**Output:**
+```markdown
+## Git Context Snapshot
+**Branch:** main
+
+### Status
+```
+ M README.md
+ M cli.js
+```
+
+### Commits
+```
+a1b2c3d - lakshya: improve sanitizer
+e4f5g6h - lakshya: add --files flag
+```
+```
+
+### 2. Full Context + Clipboard
+```bash
+gitsnap --diff --commits 5 --files 6 --copy
+```
+
+**What happens:**
+- Captures current branch + status
+- Includes the last 5 commits
+- Lists the 6 most recently changed files
+- Adds the full diff
+- Copies everything to your clipboard automatically
+
+### 3. JSON Mode (for scripts / CI)
+```bash
+gitsnap --diff --json
+```
+
+**Output (truncated):**
+```json
+{
+  "branch": "feature/auth",
+  "status": " M src/auth.js\n?? src/utils/token.js",
+  "diff": "diff --git a/src/auth.js...",
+  "commitLog": "a1b2c3d - lakshya: fix token expiry",
+  "recentFiles": ""
+}
+```
+
+### 4. Real-world Workflow
+```bash
+# Make some changes in your project
+vim src/app.js
+
+# Capture everything and paste into Claude / ChatGPT / Cursor
+gitsnap -d -n 8 -f 10 -c
+
+# Now just Ctrl+V into your AI chat
+```
+
+> ✨ Tip: Add an alias to your shell for even faster use:
+> ```bash
+> alias gs='gitsnap --diff --copy'
+> ```
 
 ---
 
