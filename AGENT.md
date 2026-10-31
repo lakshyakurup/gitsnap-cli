@@ -7,7 +7,7 @@ Your job is to deeply understand, extend, debug, and improve this codebase while
 ## Project Mission
 
 Gitsnap-cli is a production-ready, lightweight CLI + optional backend that:
-- Captures the current state of any Git repository (branch, status, diff, recent commits)
+- Captures the current state of any Git repository (branch, status, diff, recent commits, recent files)
 - Sanitizes the output aggressively so no secrets, tokens, API keys, private keys, or .env values ever leak
 - Formats the result into clean, AI-optimized Markdown (or JSON)
 - Optionally copies it to clipboard and/or uploads it to a local Express backend
@@ -33,7 +33,7 @@ Core promise: **Never leak secrets. Always produce clean, scannable, AI-ready co
 ```
 Git Repo
    ↓
-gitsnap CLI (detects repo, gathers status + optional diff + log)
+gitsnap CLI (detects repo, gathers status + optional diff + log + files)
    ↓
 Secret Sanitizer (aggressive regex + patterns)
    ↓
@@ -52,6 +52,7 @@ Markdown / JSON Formatter
 | `-d, --diff`          | Include full `git diff`                          | off     |
 | `-c, --copy`          | Copy output to clipboard                         | off     |
 | `-n, --commits <N>`   | Number of recent commits to include (1-50)       | 3       |
+| `-f, --files <N>`     | Number of most recently changed files to list    | 0 (off) |
 | `-j, --json`          | Output JSON instead of Markdown                  | off     |
 | `-u, --upload`        | Upload snapshot to backend                       | off     |
 | `-m, --secret-mask`   | Force secret masking                             | on      |
@@ -105,7 +106,7 @@ When improving the sanitizer:
 ## What “Good” Looks Like
 
 - A developer runs `gitsnap --diff` and gets a clean, perfectly structured Markdown block they can instantly paste into an AI chat
-- The Markdown starts with clear headers (Branch, Status, Diff, Recent Commits)
+- The Markdown starts with clear headers (Branch, Status, Recent Files, Diff, Commits)
 - Secrets are replaced with something like `[REDACTED]`
 - The tool works even on large monorepos
 - Backend can store historical snapshots if the user wants
