@@ -16,6 +16,7 @@ A production-ready Git snapshot CLI and backend for capturing sanitized reposito
 * **Git status output**
 * **Git diff output**
 * **Recent commit log metadata** (configurable)
+* **Recently changed files** (configurable)
 * **Optional backend sync** to a local Express server
 * **Clipboard copy support** for instant paste into Copilot, ChatGPT, Claude, Cursor, Grok and similar tools
 
@@ -44,6 +45,7 @@ A production-ready Git snapshot CLI and backend for capturing sanitized reposito
 * **JSON Mode:** Structured output support for developer tooling.
 * **Clipboard Support:** One flag to copy the snapshot straight to your clipboard.
 * **Configurable Commits:** Control how many recent commits appear with `--commits N`.
+* **Recent Files:** List the most recently changed files with `--files N`.
 * **Backend Sync:** Optional persistence layer with a local Express API.
 
 ---
@@ -55,6 +57,7 @@ A production-ready Git snapshot CLI and backend for capturing sanitized reposito
 | `-d, --diff` | Include Git diff output | `gitsnap --diff` |
 | `-c, --copy` | Copy the snapshot to clipboard | `gitsnap --diff --copy` |
 | `-n, --commits <N>` | Number of recent commits to include (default 3, max 50) | `gitsnap --commits 10` |
+| `-f, --files <N>` | Number of most recently changed files to list (max 50) | `gitsnap --files 8` |
 | `-j, --json` | Output structured JSON instead of Markdown | `gitsnap --json` |
 | `-u, --upload` | Upload the generated snapshot to the backend | `gitsnap --upload` |
 | `-m, --secret-mask` | Force masking of sensitive values (default) | `gitsnap --secret-mask` |
@@ -82,11 +85,11 @@ Copy straight to clipboard:
 gitsnap --diff --copy
 ```
 
-Show more commit history:
+Show more commit history + recent files:
 ```bash
-gitsnap --diff --commits 15
+gitsnap --diff --commits 10 --files 8
 # or short form
-gitsnap -d -n 15
+gitsnap -d -n 10 -f 8
 ```
 
 ---

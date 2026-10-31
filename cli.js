@@ -33,7 +33,7 @@ function getArgValue(args, flags) {
       return args[idx + 1];
     }
   }
-  // also support --commits=10 style
+  // also support --flag=value style
   for (const flag of flags) {
     const found = args.find(a => a.startsWith(flag + '='));
     if (found) return found.split('=')[1];
@@ -50,7 +50,10 @@ function runCLI(args) {
   const commitsArg = getArgValue(args, ['--commits', '-n']);
   const commitCount = commitsArg ? parseInt(commitsArg, 10) : 3;
 
-  const rawContext = getRepoContext(includeDiff, commitCount);
+  const filesArg = getArgValue(args, ['--files', '-f']);
+  const fileCount = filesArg ? parseInt(filesArg, 10) : 0;
+
+  const rawContext = getRepoContext(includeDiff, commitCount, fileCount);
 
   let output;
   if (jsonMode) {
