@@ -50,6 +50,8 @@ Markdown / JSON Formatter
 | Flag                  | Description                                      | Default |
 |-----------------------|--------------------------------------------------|---------|
 | `-d, --diff`          | Include full `git diff`                          | off     |
+| `-c, --copy`          | Copy output to clipboard                         | off     |
+| `-n, --commits <N>`   | Number of recent commits to include (1-50)       | 3       |
 | `-j, --json`          | Output JSON instead of Markdown                  | off     |
 | `-u, --upload`        | Upload snapshot to backend                       | off     |
 | `-m, --secret-mask`   | Force secret masking                             | on      |
@@ -111,9 +113,8 @@ When improving the sanitizer:
 ## Common Tasks
 
 - Improve secret detection patterns
-- Add new flags (e.g. `--commits 20`, `--include-untracked`)
+- Add new flags (e.g. `--include-untracked`)
 - Make Markdown even more AI-friendly
-- Add clipboard support (cross-platform)
 - Improve error messages and help text
 - Add configuration file support
 - Expand the backend
