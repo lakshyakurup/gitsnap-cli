@@ -44,11 +44,18 @@ That’s it. The output is ready to paste into any AI chat.
 ## 🎬 Demo
 
 ### 1. Basic Snapshot
+
 ```bash
 gitsnap
 ```
 
-**Output:**
+<p align="center">
+  <img src="assets/demo-basic.png" alt="Basic gitsnap output" width="750" />
+</p>
+
+<details>
+<summary>Sample text output</summary>
+
 ```markdown
 ## Git Context Snapshot
 **Branch:** main
@@ -65,11 +72,17 @@ a1b2c3d - lakshya: improve sanitizer
 e4f5g6h - lakshya: add --files flag
 ```
 ```
+</details>
 
 ### 2. Full Context + Clipboard
+
 ```bash
 gitsnap --diff --commits 5 --files 6 --copy
 ```
+
+<p align="center">
+  <img src="assets/demo-full.png" alt="Full gitsnap output with diff and files" width="750" />
+</p>
 
 **What happens:**
 - Captures current branch + status
@@ -79,22 +92,17 @@ gitsnap --diff --commits 5 --files 6 --copy
 - Copies everything to your clipboard automatically
 
 ### 3. JSON Mode (for scripts / CI)
+
 ```bash
 gitsnap --diff --json
 ```
 
-**Output (truncated):**
-```json
-{
-  "branch": "feature/auth",
-  "status": " M src/auth.js\n?? src/utils/token.js",
-  "diff": "diff --git a/src/auth.js...",
-  "commitLog": "a1b2c3d - lakshya: fix token expiry",
-  "recentFiles": ""
-}
-```
+<p align="center">
+  <img src="assets/demo-json.png" alt="gitsnap JSON output" width="750" />
+</p>
 
 ### 4. Real-world Workflow
+
 ```bash
 # Make some changes in your project
 vim src/app.js
@@ -275,6 +283,7 @@ npm start         # http://localhost:4000
 ├── markdownFormatter.js  # Output formatting
 ├── server.js             # Optional Express API
 ├── sanitizer.test.js     # Tests
+├── assets/               # Demo screenshots
 ├── AGENT.md              # Instructions for AI agents
 ├── CONTRIBUTING.md
 └── README.md
