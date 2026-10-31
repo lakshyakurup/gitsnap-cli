@@ -1,66 +1,256 @@
-# gitsnap-cli
+<div align="center">
 
-![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)
-![License](https://img.shields.io/badge/license-MIT-green.svg)
-![Node](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)
+# 📦 gitsnap-cli
 
-A production-ready Git snapshot CLI and backend for capturing sanitized repository context, formatting it into AI-ready Markdown, and optionally syncing snapshots to a local API.
+**Safe. Fast. AI-Ready Git Context Snapshots.**
 
----
+[![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)](https://github.com/lakshyakurup/gitsnap-cli)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-## Overview
+A production-ready CLI that captures sanitized Git context (branch, status, diff, commits, recent files) and formats it into clean Markdown or JSON — perfect for pasting into ChatGPT, Claude, Cursor, Copilot, Grok and any AI coding assistant.
 
-**Gitsnap** helps engineers paste safe, concise Git context directly into AI prompts without leaking secrets, tokens, or environment values. It captures:
+**Never leak secrets. Always produce clean, scannable context.**
 
-* **Current branch**
-* **Git status output**
-* **Git diff output**
-* **Recent commit log metadata** (configurable)
-* **Recently changed files** (configurable)
-* **Optional backend sync** to a local Express server
-* **Clipboard copy support** for instant paste into Copilot, ChatGPT, Claude, Cursor, Grok and similar tools
+[Quick Start](#-quick-start) • [Features](#-features) • [Usage](#-usage) • [Architecture](#-architecture) • [Security](#-security)
+
+</div>
 
 ---
 
-## Key Features
-
-* **Safe Repo Validation**
-* **Secret Masking** (API keys, JWTs, private keys, connection strings, .env values)
-* **AI-Optimized Markdown**
-* **JSON Mode**
-* **Clipboard Support** (`--copy`)
-* **Configurable Commits** (`--commits N`)
-* **Recent Files** (`--files N`)
-* **Backend Sync**
-
----
-
-## CLI Flags
-
-| Flag | Description | Example |
-|------|-------------|--------|
-| `-d, --diff` | Include Git diff | `gitsnap --diff` |
-| `-c, --copy` | Copy to clipboard | `gitsnap --diff --copy` |
-| `-n, --commits <N>` | Number of recent commits (default 3) | `gitsnap --commits 10` |
-| `-f, --files <N>` | Number of recent files to list | `gitsnap --files 8` |
-| `-j, --json` | Output JSON | `gitsnap --json` |
-| `--no-secret-mask` | Disable masking (debug only) | `gitsnap --no-secret-mask` |
-
----
-
-## Quick Start
+## 🚀 Quick Start
 
 ```bash
+# Install & link
 npm install
 npm link
 
-gitsnap --diff
+# Basic snapshot
+gitsnap
+
+# Full power
+gitsnap --diff --commits 10 --files 8 --copy
+```
+
+That’s it. The output is ready to paste into any AI chat.
+
+---
+
+## ✨ Features
+
+| Feature | Description |
+|---------|-------------|
+| **Secret Sanitization** | Automatically redacts API keys, JWTs, private keys, connection strings, `.env` values |
+| **AI-Optimized Markdown** | Clean headings and code blocks designed for LLM consumption |
+| **JSON Mode** | Machine-readable output for tooling and pipelines |
+| **Clipboard Support** | One flag copies the entire snapshot to your clipboard |
+| **Configurable Commits** | Control how many recent commits appear |
+| **Recent Files** | List the most recently changed files |
+| **Zero Heavy Dependencies** | Only Express for the optional backend |
+| **Cross-platform** | Works on macOS, Linux and Windows |
+
+---
+
+## 📋 Full CLI Reference
+
+| Flag | Short | Description | Default |
+|------|-------|-------------|---------|
+| `--diff` | `-d` | Include full `git diff` output | off |
+| `--copy` | `-c` | Copy the final output to clipboard | off |
+| `--commits <N>` | `-n` | Number of recent commits to include (1–50) | `3` |
+| `--files <N>` | `-f` | Number of most recently changed files to list (0–50) | `0` (off) |
+| `--json` | `-j` | Output structured JSON instead of Markdown | off |
+| `--no-secret-mask` | | Disable secret masking (debug only) | off |
+| `--api-url <url>` | | Override backend URL when using upload | `http://localhost:4000/api` |
+
+### Usage Examples
+
+```bash
+# Minimal
+gitsnap
+
+# Most common – diff + copy
 gitsnap --diff --copy
-gitsnap -d -n 10 -f 8 --copy
+
+# Full context for a complex change
+gitsnap -d -n 15 -f 12 --copy
+
+# JSON for scripts / CI
+gitsnap --diff --json > context.json
+
+# Short form
+gitsnap -d -n 10 -f 8 -c
 ```
 
 ---
 
-## License
+## 📊 Example Output
 
-MIT
+```markdown
+## Git Context Snapshot
+**Branch:** feature/auth-refactor
+
+### Status
+```
+ M src/auth.js
+ M src/middleware.js
+?? src/utils/token.js
+```
+
+### Recent Files
+```
+src/auth.js
+src/middleware.js
+src/utils/token.js
+package.json
+```
+
+### Diff
+```diff
+diff --git a/src/auth.js b/src/auth.js
+...
+```
+
+### Commits
+```
+a1b2c3d - lakshya: fix token expiry
+e4f5g6h - lakshya: add refresh logic
+```
+```
+
+All secrets are automatically replaced with `[REDACTED]`.
+
+---
+
+## 🏗️ Architecture
+
+### High-level Data Flow
+
+```mermaid
+flowchart LR
+    A[Git Repository] --> B[gitsnap CLI]
+    B --> C[gitService.js]
+    C --> D[Raw Context]
+    D --> E[sanitizer.js]
+    E --> F[Clean Context]
+    F --> G[markdownFormatter.js]
+    G --> H[AI-Ready Markdown / JSON]
+    H --> I[Clipboard]
+    H --> J[Express Backend]
+```
+
+### Component Overview
+
+```text
+┌──────────────────────────────────────────────────────────┐
+│                        gitsnap-cli                               │
+│                                                                  │
+│  index.js  ──►  cli.js  ──►  gitService.js                       │
+│                      │                                           │
+│                      ├──► sanitizer.js                            │
+│                      │                                           │
+│                      └──► markdownFormatter.js                    │
+│                                                                  │
+│  Optional: server.js (Express) → snapshots.json                  │
+└──────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🛡️ Security
+
+The sanitizer aggressively redacts:
+
+| Category | Examples |
+|----------|----------|
+| Environment variables | `API_KEY=...`, `SECRET=...`, `PASSWORD=...` |
+| Provider keys | OpenAI (`sk-...`), Anthropic, Slack, GitHub PATs, AWS, Google |
+| Tokens | JWTs, Bearer tokens |
+| Private keys | `-----BEGIN RSA PRIVATE KEY-----` blocks |
+| Connection strings | Postgres, MySQL, MongoDB, Redis URLs |
+
+You can temporarily disable masking with `--no-secret-mask` (not recommended for real work).
+
+---
+
+## 💻 Installation & Development
+
+```bash
+git clone https://github.com/lakshyakurup/gitsnap-cli.git
+cd gitsnap-cli
+npm install
+npm link          # makes `gitsnap` available globally
+
+# Run tests
+npm test
+
+# Start optional backend
+npm start         # http://localhost:4000
+```
+
+### Project Structure (core files)
+
+```text
+.
+├── index.js              # CLI entry point
+├── cli.js                # Argument parsing + clipboard
+├── gitService.js         # Git command runner
+├── sanitizer.js          # Secret redaction engine
+├── markdownFormatter.js  # Output formatting
+├── server.js             # Optional Express API
+├── sanitizer.test.js     # Tests
+├── AGENT.md              # Instructions for AI agents
+├── CONTRIBUTING.md
+└── README.md
+```
+
+---
+
+## 🤖 For AI Agents / Copilot
+
+See **[AGENT.md](AGENT.md)** for full operating instructions, coding standards and security rules when working on this repository.
+
+---
+
+## 📦 Backend API (Optional)
+
+```bash
+npm start
+```
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/health` | GET | Health check |
+| `/api/snapshots` | GET | List all saved snapshots |
+| `/api/snapshots` | POST | Save a new snapshot |
+
+---
+
+## 🏆 Why gitsnap-cli?
+
+Modern AI coding tools are only as good as the context you give them.  
+`gitsnap` gives you a **safe, one-command way** to capture exactly what the AI needs — without ever risking a leaked secret.
+
+Perfect for:
+
+- Daily pair-programming with Claude / ChatGPT / Cursor
+- Preparing clean context for code reviews
+- CI pipelines that need structured Git state
+- Hackathons and rapid prototyping
+
+---
+
+## 📚 License
+
+MIT © lakshyakurup
+
+---
+
+<div align="center">
+
+**Star the repo if it saves you time!** ⭐
+
+Made for the international hackathon season 🚀
+
+</div>
