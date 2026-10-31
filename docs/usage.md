@@ -1,38 +1,14 @@
-# gitsnap-cli Usage Guide
+# Usage
 
-## Basic Commands
+The supported executable is the root `gitsnap` command. Run it from a Git working tree; options are flags, not subcommands.
 
-### Snapshot
 ```bash
-gitsnap snapshot
-```
-Creates a complete snapshot of repo state.
-
-### Status
-```bash
-gitsnap status
-```
-Shows current git status.
-
-### Export
-```bash
-gitsnap export --output snapshot.md
-```
-Saves snapshot to a file.
-
-## Output Formats
-
-### AI Template
-```bash
-gitsnap snapshot --ai
+gitsnap
+gitsnap --diff
+gitsnap --json
+gitsnap --upload --api-url http://localhost:4000/api
 ```
 
-### JSON
-```bash
-gitsnap snapshot --json
-```
+Secret masking is enabled by default. `--no-secret-mask` disables it and can expose credentials in printed or uploaded repository content.
 
-### Compact
-```bash
-gitsnap snapshot --compact
-```
+For installation, every supported flag, output fields, and limitations, see the [README CLI reference](../README.md#cli-reference) and [snapshot format](../README.md#snapshot-format).

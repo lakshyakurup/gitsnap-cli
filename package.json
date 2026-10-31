@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node server.js",
-    "test": "node sanitizer.test.js",
+    "test": "node sanitizer.test.js && node --test cli.test.js",
     "snap": "node index.js --diff",
     "snap:copy": "node index.js --diff --copy"
   },
@@ -29,5 +29,8 @@
   },
   "dependencies": {
     "express": "^4.19.2"
-  }
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }

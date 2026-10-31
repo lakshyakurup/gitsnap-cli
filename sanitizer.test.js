@@ -1,4 +1,5 @@
 const { sanitizeContext } = require('./sanitizer');
+const assert = require('node:assert/strict');
 
 let passed = 0;
 let failed = 0;
@@ -38,6 +39,10 @@ test('Private key block', privKey, '[REDACTED]', 'MIIEowIBAAKCAQEA0Z3VS5JJcds3xf
 
 test('Normal code survives', 'const apiUrl = "https://api.example.com";\nlet count = 42;', 'api.example.com', null);
 test('Normal variable', 'const userName = "lakshya";', 'lakshya', null);
+const stripeExample = ['sk', '_live_', '0123456789abcdefghijkl'].join('');
+test('Stripe key', stripeExample, '[REDACTED]', stripeExample);
+test('High-entropy token', 'aQ9mZ2xP8vN4cK7jH1sD5fG0bR3wY6uT', '[REDACTED]', 'aQ9mZ2xP8vN4cK7jH1sD5fG0bR3wY6uT');
+test('Database URL password', 'postgres://alice:db-password@db.example/app', '[REDACTED]', 'db-password');
 
 console.log(`\nResults: ${passed} passed, ${failed} failed`);
 if (failed > 0) process.exit(1);

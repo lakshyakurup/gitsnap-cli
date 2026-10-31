@@ -8,6 +8,7 @@ const SECRET_PATTERNS = [
   /(bearer\s+)[a-zA-Z0-9\-\._~\+\/]+=*/gi,
   /(authorization\s*[:=]\s*['"]?)(bearer\s+)?[a-zA-Z0-9\-\._~\+\/]+=*/gi,
   /\b(sk-[a-zA-Z0-9]{20,})\b/g,
+  /\b(?:sk|rk)_(?:live|test)_[a-zA-Z0-9]{16,}\b/g,
   /\b(sk-ant-[a-zA-Z0-9\-]{20,})\b/g,
   /\b(xox[baprs]-[a-zA-Z0-9-]{10,})\b/g,
   /\b(ghp_[a-zA-Z0-9]{30,})\b/g,
@@ -20,7 +21,9 @@ const SECRET_PATTERNS = [
   /(postgres(?:ql)?:\/\/[^\s'"]+)/gi,
   /(mysql:\/\/[^\s'"]+)/gi,
   /(mongodb(?:\+srv)?:\/\/[^\s'"]+)/gi,
-  /(redis:\/\/[^\s'"]+)/gi
+  /(redis:\/\/[^\s'"]+)/gi,
+  /((?:^|[\s"'`])(?:[A-Z0-9_]*(?:SECRET|KEY|TOKEN|PASSWORD|PASSWD|AUTH|CREDENTIAL|DATABASE_URL|DB_URL|CONNECTION_STRING|CONN_STRING)[A-Z0-9_]*)\s*=\s*)(?:"[^"\r\n]*"|'[^'\r\n]*'|[^\s,;]+)/gim,
+  /((?:mongodb(?:\+srv)?|postgres(?:ql)?|mysql|redis|amqps?):\/\/[^:/@\s]+:)[^@/\s]+(@)/gi
 ];
 
 const SAFE_GENERIC = /\b(?:token|key|secret|password|auth)[_-]?[a-zA-Z0-9]*\s*[=:]\s*['"]?([a-zA-Z0-9_\-]{20,})/gi;
@@ -40,6 +43,20 @@ function sanitizeContext(text) {
   }
 
   s = s.replace(SAFE_GENERIC, (match, value) => match.replace(value, '[REDACTED]'));
+
+  s = s.replace(/[a-zA-Z0-9+/_=-]{32,}/g, (value) => {
+    const frequencies = new Map();
+    for (const character of value) {
+      frequencies.set(character, (frequencies.get(character) || 0) + 1);
+    }
+
+    let entropy = 0;
+    for (const count of frequencies.values()) {
+      const probability = count / value.length;
+      entropy -= probability * Math.log2(probability);
+    }
+    return entropy >= 4.2 ? '[REDACTED]' : value;
+  });
 
   return s;
 }

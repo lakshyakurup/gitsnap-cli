@@ -1,21 +1,40 @@
-# gitsnap-cli Examples
+# Examples
 
-## Example 1: Quick Snapshot
+## Markdown snapshot with diff
+
 ```bash
-gitsnap snapshot
+gitsnap --diff
 ```
 
-## Example 2: Export for AI
+## JSON snapshot
+
 ```bash
-gitsnap snapshot --ai --output prompt.md
+gitsnap --json > snapshot.json
 ```
 
-## Example 3: JSON Output
+## Upload to the local backend
+
+Start the API in another terminal with `npm start`, then run:
+
 ```bash
-gitsnap snapshot --json > repo-state.json
+gitsnap --upload
 ```
 
-## Example 4: Summary Only
+To upload the diff to a different API base URL:
+
 ```bash
-gitsnap summary
+gitsnap --diff --upload --api-url http://localhost:4100/api
 ```
+
+## Read JSON from Node.js
+
+```js
+const { execFileSync } = require('node:child_process');
+
+const snapshot = JSON.parse(
+	execFileSync('gitsnap', ['--json'], { encoding: 'utf8' })
+);
+console.log(snapshot.branch);
+```
+
+All commands and output fields are documented in the [README](../README.md).
