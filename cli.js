@@ -26,13 +26,31 @@ function copyToClipboard(text) {
   }
 }
 
+function getArgValue(args, flags) {
+  for (const flag of flags) {
+    const idx = args.indexOf(flag);
+    if (idx !== -1 && args[idx + 1] && !args[idx + 1].startsWith('-')) {
+      return args[idx + 1];
+    }
+  }
+  // also support --commits=10 style
+  for (const flag of flags) {
+    const found = args.find(a => a.startsWith(flag + '='));
+    if (found) return found.split('=')[1];
+  }
+  return null;
+}
+
 function runCLI(args) {
   const includeDiff = args.includes('--diff') || args.includes('-d');
   const noMask = args.includes('--no-secret-mask');
   const copy = args.includes('--copy') || args.includes('-c');
   const jsonMode = args.includes('--json') || args.includes('-j');
 
-  const rawContext = getRepoContext(includeDiff);
+  const commitsArg = getArgValue(args, ['--commits', '-n']);
+  const commitCount = commitsArg ? parseInt(commitsArg, 10) : 3;
+
+  const rawContext = getRepoContext(includeDiff, commitCount);
 
   let output;
   if (jsonMode) {
